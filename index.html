@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starset Services</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content responsive-wrapper">
+            <div class="header-logo">
+                <a href="https://www.indiapost.gov.in/vas/Pages/IndiaPostHome.aspx">
+                    <div>
+                        <img src="/logo.jpg" alt="Logo Icon" />
+                    </div>
+                </a>
+            </div>
+            <div class="header-navigation">
+                <a style="text-decoration: none;" href="https://www.indiapost.gov.in/vas/Pages/IndiaPostHome.aspx">
+                    <h2>Post Office India</h2>
+                </a>
+            </div>
+            <a href="#" class="button">
+                <i class="ph-list-bold"></i>
+                <span>Menu</span>
+            </a>
+        </div>
+    </header>
+    <main class="main">
+        <div class="responsive-wrapper">
+            <div class="main-header">
+                <h1>Dashboard</h1>
+            </div>
+            <div class="horizontal-tabs">
+                <a href="#" onclick="showContent('queue')">Queue Management</a>
+                <a href="#" onclick="showContent('feedback')">Customer Feedback</a>
+                <a href="#" onclick="showContent('analysis')">Real Time Analysis</a>
+            </div>
+        </div>
+        <div class="content">
+            <!-- Queue Management Video -->
+            <div id="queue" class="content-main hidden">
+                <div class="video-container">
+                    <video id="queue-video" autoplay muted loop playsinline>
+                        <source src="/priority_output.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <!-- Feedback Video -->
+            <div id="feedback" class="content-main hidden">
+                <div class="video-container">
+                    <!-- Feedback video element -->
+                    <video id="feedback-video" autoplay muted loop playsinline>
+                        <source src="/face_output.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis section -->
+        <div id="analysis" class="content-mainr hidden">
+            <h1>Service Desk Analysis</h1>
+            <div id="insights"></div>
+            <div class="graph-container" id="graph1"></div>
+            <div class="graph-container" id="graph2"></div>
+            <div class="graph-container" id="graph3"></div>
+            <div class="graph-container" id="graph4"></div>
+        </div>  
+    </main>
+
+    <script>
+        function showContent(id) {
+            // Hide all content sections
+            const contentSections = document.querySelectorAll('.content-main');
+            contentSections.forEach(section => section.classList.add('hidden'));
+
+            // Show the clicked section
+            const section = document.getElementById(id);
+            section.classList.remove('hidden');
+
+            // Play video if section is either queue or feedback
+            if (id === 'queue') {
+                const video = document.getElementById('queue-video');
+                if (video) {
+                    video.play(); // Play queue video
+                }
+            } else if (id === 'feedback') {
+                const video = document.getElementById('feedback-video');
+                if (video) {
+                    video.play(); // Play feedback video
+                }
+            }
+
+            // If the section is "analysis", load and display all graphs
+            if (id === 'analysis') {
+                fetch('http://127.0.0.1:5000/data')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Display insights
+                        const insightsDiv = document.getElementById('insights');
+                        const insights = data.insights.map(insight => `<p>${insight}</p>`).join('');
+                        insightsDiv.innerHTML = `<h2>Insights</h2>${insights}`;
+
+                        // Plot each graph
+                        Plotly.react('graph1', JSON.parse(data.graphs.graph1).data, JSON.parse(data.graphs.graph1).layout);
+                        Plotly.react('graph2', JSON.parse(data.graphs.graph2).data, JSON.parse(data.graphs.graph2).layout);
+                        Plotly.react('graph3', JSON.parse(data.graphs.graph3).data, JSON.parse(data.graphs.graph3).layout);
+                        Plotly.react('graph4', JSON.parse(data.graphs.graph4).data, JSON.parse(data.graphs.graph4).layout);
+                    });
+            }
+        }
+    </script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</body>
+</html>

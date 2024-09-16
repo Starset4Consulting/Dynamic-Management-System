@@ -1,0 +1,8 @@
+TokenIssued,PriorityNumbersAssigned,TimeToServiceDesk(min),ServiceCompletionTime(min),FacialRecognitionIssues,Revisits,CustomerExpression,ETA(min),ActualTimeTaken(min)
+150,50,5,10,0,1,neutral,10,12
+200,60,7,12,0,2,happy,12,14
+180,55,6,11,2,2,neutral,11,12
+175,48,8,10,0,1,angry,10,11
+220,65,7,13,0,3,happy,14,16
+210,60,6,12,0,2,angry,13,15
+190,58,5,11,0,1,neutral,11,12
